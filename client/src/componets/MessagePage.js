@@ -13,6 +13,8 @@ import Loading from './Loading';
 import backgroundImage from '../assets/wallapaper.jpeg'
 import { IoMdSend } from "react-icons/io";
 import moment from 'moment'
+import { FaMapMarkerAlt } from "react-icons/fa";
+
 
 const MessagePage = () => {
   const params = useParams()
@@ -142,6 +144,36 @@ const MessagePage = () => {
     }
   }
 
+  const handleShareLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const locationLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  
+          // Send the location as a message
+          if (socketConnection) {
+            socketConnection.emit('new message', {
+              sender: user?._id,
+              receiver: params.userId,
+              text: locationLink,
+              imageUrl: "",
+              videoUrl: "",
+              msgByUserId: user?._id,
+            });
+          }
+        },
+        (error) => {
+          console.error('Error fetching location:', error.message);
+          alert('Unable to fetch location. Please enable location services.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+  };
+  
+
 
   return (
     <div style={{ backgroundImage : `url(${backgroundImage})`}} className='bg-no-repeat bg-cover'>
@@ -182,36 +214,45 @@ const MessagePage = () => {
                 
                   {/**all message show here */}
                   <div className='flex flex-col gap-2 py-2 mx-2' ref={currentMessage}>
-                    {
-                      allMessage.map((msg,index)=>{
-                        return(
-                          <div className={` p-1 py-1 rounded w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${user._id === msg?.msgByUserId ? "ml-auto bg-teal-100" : "bg-white"}`}>
-                            <div className='w-full relative'>
-                              {
-                                msg?.imageUrl && (
-                                  <img 
-                                    src={msg?.imageUrl}
-                                    className='w-full h-full object-scale-down'
-                                  />
-                                )
-                              }
-                              {
-                                msg?.videoUrl && (
-                                  <video
-                                    src={msg.videoUrl}
-                                    className='w-full h-full object-scale-down'
-                                    controls
-                                  />
-                                )
-                              }
-                            </div>
-                            <p className='px-2'>{msg.text}</p>
-                            <p className='text-xs ml-auto w-fit'>{moment(msg.createdAt).format('hh:mm A')}</p>
-                          </div>
+            {
+              allMessage.map((msg, index) => {
+                return (
+                  <div key={index} className={`p-1 py-1 rounded w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${user._id === msg?.msgByUserId ? "ml-auto bg-teal-100" : "bg-white"}`}>
+                    <div className='w-full relative'>
+                      {
+                        msg?.imageUrl && (
+                          <img 
+                            src={msg?.imageUrl}
+                            className='w-full h-full object-scale-down'
+                          />
                         )
-                      })
+                      }
+                      {
+                        msg?.videoUrl && (
+                          <video
+                            src={msg.videoUrl}
+                            className='w-full h-full object-scale-down'
+                            controls
+                          />
+                        )
+                      }
+                    </div>
+                    {
+                      msg.text.startsWith('https://www.google.com/maps?q=') ? (
+                        <a href={msg.text} target='_blank' rel='noopener noreferrer' className='text-blue-500 underline'>
+                          View Location
+                        </a>
+                      ) : (
+                        <p className='px-2'>{msg.text}</p>
+                      )
                     }
+                    <p className='text-xs ml-auto w-fit'>{moment(msg.createdAt).format('hh:mm A')}</p>
                   </div>
+                );
+              })
+            }
+          </div>
+
 
 
                   {/**upload Image display */}
@@ -272,18 +313,29 @@ const MessagePage = () => {
                   {
                     openImageVideoUpload && (
                       <div className='bg-white shadow rounded absolute bottom-14 w-36 p-2'>
-                      <form>
+                        <form>
+                          {/* Image Upload */}
                           <label htmlFor='uploadImage' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
-                              <div className='text-primary'>
-                                  <FaImage size={18}/>
-                              </div>
-                              <p>Image</p>
+                            <div className='text-primary'>
+                              <FaImage size={18} />
+                            </div>
+                            <p>Image</p>
                           </label>
+
+                          {/* Video Upload */}
                           <label htmlFor='uploadVideo' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
-                              <div className='text-purple-500'>
-                                  <FaVideo size={18}/>
-                              </div>
-                              <p>Video</p>
+                            <div className='text-purple-500'>
+                              <FaVideo size={18} />
+                            </div>
+                            <p>Video</p>
+                          </label>
+
+                          {/* Location Sharing */}
+                          <label onClick={handleShareLocation} className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
+                            <div className='text-green-500'>
+                              <FaMapMarkerAlt size={18} />
+                            </div>
+                            <p>Location</p>
                           </label>
 
                           <input 
@@ -299,10 +351,11 @@ const MessagePage = () => {
                             onChange={handleUploadVideo}
                             className='hidden'
                           />
-                      </form>
+                        </form>
                       </div>
                     )
                   }
+
                   
               </div>
 
