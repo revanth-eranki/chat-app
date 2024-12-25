@@ -48,6 +48,7 @@ const CheckEmailPage = () => {
 
     } 
     catch (error) {
+      console.error("Error details:", error.response || error.message);
       toast.error(error?.response?.data?.message) 
     }
 
