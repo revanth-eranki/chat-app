@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import uploadFile from '../helpers/uploadFile';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import config from '../config';
 const RegisterPage = () => {
 
   const [data,setData] = useState({
@@ -51,7 +51,7 @@ const RegisterPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     e.stopPropagation()
-    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`;
+    const URL = `${config.REACT_APP_BACKEND_URL}/api/register`;
 
     try {
       const response = await axios.post(URL,data);

@@ -7,6 +7,7 @@ import Sidebar from '../componets/Sidebar';
 import logo from '../assets/logo.png';
 import io from 'socket.io-client';
 import toast from 'react-hot-toast';
+import config from '../config';
 
 const Home = () => {
   const user = useSelector((state) => state.user);
@@ -16,7 +17,7 @@ const Home = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/user-details`;
+      const URL = `${config.REACT_APP_BACKEND_URL}/api/user-details`;
       const response = await axios.get(URL, { withCredentials: true });
       dispatch(setUser(response.data.data));
 
@@ -37,7 +38,7 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
+      const socketConnection = io(config.REACT_APP_BACKEND_URL, {
         auth: { token },
       });
 

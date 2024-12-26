@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
-
+import config from '../config';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { PiUserCircle } from "react-icons/pi";
@@ -29,7 +29,7 @@ const CheckEmailPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     e.stopPropagation()
-    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/email`;
+    const URL = `${config.REACT_APP_BACKEND_URL}/api/email`;
 
     try {
       const response = await axios.post(URL,data);

@@ -6,7 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import {setUser} from '../redux/userSlice';
-
+import config from "../config";
 const EditUserDetails = ({ onClose, user }) => {
   const [data, setData] = useState({
     name: user?.name || "",
@@ -48,7 +48,7 @@ const EditUserDetails = ({ onClose, user }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/update-user`;
+      const URL = `${config.REACT_APP_BACKEND_URL}/api/update-user`;
       const response = await axios.post(URL, data,{ withCredentials: true });
       toast.success(response.data.message);
       if(response.data.success){

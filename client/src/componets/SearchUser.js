@@ -4,7 +4,7 @@ import Loading from './Loading';
 import UserSearchCard from './UserSearchCard';
 import toast from 'react-hot-toast';
 import axios from 'axios'
-
+import config from '../config';
 const SearchUser = ({onClose}) => {
     const [searchUser, setSearchUser] = useState([])
     const [loading,setLoading] = useState(false)
@@ -13,7 +13,7 @@ const SearchUser = ({onClose}) => {
 
     const handleSearchUser = async()=>{
 
-        const URL = `${process .env.REACT_APP_BACKEND_URL}/api/search-user`
+        const URL = `${config.REACT_APP_BACKEND_URL}/api/search-user`
         try {
             setLoading(true)
             const response  = await axios.post(URL,{

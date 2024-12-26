@@ -8,6 +8,7 @@ import { PiUserCircle } from "react-icons/pi";
 import Avatar from '../componets/Avatar';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../redux/userSlice';
+import config from '../config';
 
 const CheckPasswordPage = () => {
 
@@ -42,7 +43,7 @@ const CheckPasswordPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     e.stopPropagation()
-    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/password`;
+    const URL = `${config.REACT_APP_BACKEND_URL}/api/password`;
 
     try {
     
