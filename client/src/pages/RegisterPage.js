@@ -51,7 +51,7 @@ const RegisterPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     e.stopPropagation()
-    const URL = `${config.REACT_APP_BACKEND_URL}/api/register`;
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`;
 
     try {
       const response = await axios.post(URL,data);

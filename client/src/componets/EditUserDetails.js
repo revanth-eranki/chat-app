@@ -48,14 +48,17 @@ const EditUserDetails = ({ onClose, user }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const URL = `${config.REACT_APP_BACKEND_URL}/api/update-user`;
+      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/update-user`;
+      console.log(data)
       const response = await axios.post(URL, data,{ withCredentials: true });
       toast.success(response.data.message);
+      
       if(response.data.success){
         dispatch(setUser(response.data.data))
         onClose()
       }
     } catch (error) {
+      console.log("Error details:", error.response || error.message);
       toast.error(error?.response?.data?.message);
     }
   };

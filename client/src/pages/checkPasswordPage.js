@@ -43,7 +43,7 @@ const CheckPasswordPage = () => {
   const handleSubmit = async(e) => {
     e.preventDefault()
     e.stopPropagation()
-    const URL = `${config.REACT_APP_BACKEND_URL}/api/password`;
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/password`;
 
     try {
     

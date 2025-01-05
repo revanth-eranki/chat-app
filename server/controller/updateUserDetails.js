@@ -17,6 +17,7 @@ async function updateUserDetails(request, response) {
             { name, profile_pic }
         );
         const userInfo = await UserModel.findById(user._id);
+        console.log("update user details",userInfo)
         return response.json({
             message: "Updated user details",
             data: userInfo,
