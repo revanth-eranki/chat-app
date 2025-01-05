@@ -24,6 +24,9 @@ app.use(cookiesParser());
 
 // API endpoints
 app.use('/api', router);
+app.get("/", (req, res) => {
+    res.send("Backend is running!");
+});
 
 // Serve React app for any non-API routes
 // app.get('*', (req, res) => {
